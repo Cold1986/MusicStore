@@ -21,7 +21,8 @@ using System.Web.Mvc;
 using MvcMusicStore.Models;
 
 namespace MvcMusicStore.Controllers
-{ 
+{
+    [Authorize(Roles = "Administrator")]
     public class StoreManagerController : Controller
     {
         private MusicStoreEntities db = new MusicStoreEntities();
@@ -52,7 +53,7 @@ namespace MvcMusicStore.Controllers
             ViewBag.GenreId = new SelectList(db.Genres, "GenreId", "Name");
             ViewBag.ArtistId = new SelectList(db.Artists, "ArtistId", "Name");
             return View();
-        } 
+        }
 
         //
         // POST: /StoreManager/Create
@@ -64,17 +65,17 @@ namespace MvcMusicStore.Controllers
             {
                 db.Albums.Add(album);
                 db.SaveChanges();
-                return RedirectToAction("Index");  
+                return RedirectToAction("Index");
             }
 
             ViewBag.GenreId = new SelectList(db.Genres, "GenreId", "Name", album.GenreId);
             ViewBag.ArtistId = new SelectList(db.Artists, "ArtistId", "Name", album.ArtistId);
             return View(album);
         }
-        
+
         //
         // GET: /StoreManager/Edit/5
- 
+
         public ActionResult Edit(int id)
         {
             Album album = db.Albums.Find(id);
@@ -102,7 +103,7 @@ namespace MvcMusicStore.Controllers
 
         //
         // GET: /StoreManager/Delete/5
- 
+
         public ActionResult Delete(int id)
         {
             Album album = db.Albums.Find(id);
@@ -114,7 +115,7 @@ namespace MvcMusicStore.Controllers
 
         [HttpPost, ActionName("Delete")]
         public ActionResult DeleteConfirmed(int id)
-        {            
+        {
             Album album = db.Albums.Find(id);
             db.Albums.Remove(album);
             db.SaveChanges();
